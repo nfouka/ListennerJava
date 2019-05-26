@@ -1,0 +1,13 @@
+{
+    "name": "root/listener-php",
+    "description": "listenner",
+    "type": "aws",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "nfouka",
+            "email": "nadir.fouka@gmail.com"
+        }
+    ],
+    "require": {}
+}

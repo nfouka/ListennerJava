@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>    PHP / Design Pattern : Exemple d'utilisation de l'Observateur (Observer)
+</title>
+
+        <meta charset="UTF-8">
+            <meta name="description" content="Vous trouverez dans cet article un exemple d'utilisation du patron de conception Observateur (Observer) en PHP.">
+        <meta name="author" content="Christophe Meneses">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-config" content="/favicons/browserconfig.xml">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="apple-touch-icon" sizes="144x144" href="https://www.christophe-meneses.fr/favicons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://www.christophe-meneses.fr/favicons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://www.christophe-meneses.fr/favicons/favicon-16x16.png">
+        <link rel="manifest" href="https://www.christophe-meneses.fr/favicons/site.webmanifest">
+        <link rel="mask-icon" href="https://www.christophe-meneses.fr/favicons/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="shortcut icon" href="https://www.christophe-meneses.fr/favicons/favicon.ico">
+
+            <link rel="alternate" type="application/rss+xml" href="https://www.christophe-meneses.fr/rss/articles.xml">
+
+            
+
+    <link rel="stylesheet" href="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/app.css">
+
+        <link rel="stylesheet" href="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/show.css">
+    <meta id="webpki_lacunasoftware_com"></head>
+    <body>
+        
+    <div class="conteneur-header-main-espace-footer">
+        <header class="navbar navbar-inverse navbar-fixed-top">
+            <nav class="container" role="navigation">
+                <div class="navbar-header">
+                    <span class="navbar-brand">Christophe Meneses - Développeur</span>
+                    <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                        <span class="sr-only">Navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="https://www.christophe-meneses.fr/articles/1">Liste des articles</a>
+                        </li>
+                        <li>
+                            <a href="https://www.christophe-meneses.fr/contact">Contact</a>
+                        </li>
+                        <li class="logo linkedin">
+                            <a href="https://www.linkedin.com/in/christophe-meneses/" target="_blank" title="Voir mon profil sur Linkedin"><span>Linkedin</span></a>
+                        </li>
+                        <li class="logo viadeo">
+                            <a href="http://fr.viadeo.com/fr/profile/christophe.meneses" target="_blank" title="Voir mon profil sur Viadeo"><span>Viadeo</span></a>
+                        </li>
+                        <li class="logo github">
+                            <a href="https://github.com/cmen" target="_blank" title="Voir mon profil sur GitHub"><span>Github</span></a>
+                        </li>
+                        <li class="logo rss">
+                            <a href="https://www.christophe-meneses.fr/rss/articles.xml" target="_blank" title="S'abonner à mon flux RSS"><span>Flux RSS</span></a>
+                        </li>
+                        <li id="recherche">
+                            <form class="form-inline" action="/rechercher" method="POST">
+                                <div class="form-group">
+                                    <label class="sr-only" for="recherche">Recherche</label>
+                                    <input type="text" class="form-control" name="recherche" placeholder="Rechercher" "="">
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-1"></div>
+
+                
+    <section class="col-sm-7 main" id="top">
+        <nav class="article-fil-ariane" style="margin-bottom:20px">
+    <a href="https://www.christophe-meneses.fr/articles/1">Tous les articles</a>
+
+    <span class="glyphicon glyphicon-chevron-right"></span>
+
+            <a href="https://www.christophe-meneses.fr/articles/php/1">PHP</a>
+        /            <a href="https://www.christophe-meneses.fr/articles/design-pattern/1">Design Pattern</a>
+            
+    <span class="glyphicon glyphicon-chevron-right"></span>
+
+    Exemple d'utilisation de l'Observateur (Observer)
+
+</nav>
+        <aside class="pub-haut-page">
+            <script type="text/javascript" async="" defer="defer" src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/piwik.js"></script><script async="" src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/adsbygoogle.js"></script>
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4686377518766828" data-ad-slot="8231275995" data-ad-format="auto">
+            </ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </aside>
+
+        <article class="article">
+            <header>
+                                    <a href="https://www.christophe-meneses.fr/articles/php/1" class="lien-label" title="Afficher l'ensemble des articles PHP">
+                        <span class="label label-success">PHP</span>
+                    </a>
+                                    <a href="https://www.christophe-meneses.fr/articles/design-pattern/1" class="lien-label" title="Afficher l'ensemble des articles Design Pattern">
+                        <span class="label label-success">Design Pattern</span>
+                    </a>
+                
+                <h1 class="article-titre">Exemple d'utilisation de l'Observateur (Observer)</h1>
+
+                <div class="article-meta">
+                    Publié le 10/10/2016.
+                                    </div>
+            </header>
+
+            <p>Vous trouverez dans cet article un exemple d'utilisation du patron de conception <em>Observateur</em> (Observer) en PHP.</p>
+
+<h2>Définition</h2>
+
+<p>Ce patron de conception permet de limiter la dépendance entre les 
+objets. Lorsque un événement précis se produit dans une application, il 
+peut être nécessaire de lancer une ou plusieurs actions. Habituellement,
+ toutes ces actions sont appelées à la suite dans une méthode. 
+L'inconvénient de cette pratique est que la classe appelante devient 
+dépendante de toutes les autres classes qui exécutent ces actions.</p>
+
+<p>Grâce à ce patron de conception, on va pouvoir séparer les 
+différentes actions. Pour cela, on crée un objet qui va être observé. 
+C'est lui qui va lancé l'alerte. Ensuite, on va crée plusieurs objets 
+qui vont observer cet objet.
+Dès que l'alerte est donnée par l'objet observé, les objets observateurs
+ vont lancer leur(s) action(s).</p>
+
+<h2>Exemple</h2>
+<p>Notre exemple va consister à envoyer un e-mail aux membres et à 
+mettre à jour le moteur de recherche lorsque l'on crée un article sur un
+ blog.  PHP définit des interfaces standards pour mettre en place 
+l'Observateur. On va les utiliser dans notre exemple.</p>
+
+<p>Notre première classe est simplement la classe métier <strong>Article</strong>. Pour simplifier l'exemple, elle n'a qu'un seul attribut, le titre de l'article :</p>
+<pre><code class="php hljs"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Article</span>
+</span>{
+    <span class="hljs-keyword">private</span> $title;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getTitle</span><span class="hljs-params">()</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;title;
+    }
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setTitle</span><span class="hljs-params">($title)</span>
+    </span>{
+        <span class="hljs-keyword">$this</span>-&gt;title = $title;
+
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>;
+    }
+}
+</code>
+</pre>
+
+<p>Ensuite, on a la classe <strong>ArticleManager</strong> qui s'occupe 
+de la gestion d'un article (création d'un article par exemple). C'est la
+ classe qui va être observée. Elle va donc étendre la classe standard <strong>SplSubject</strong>.
+3 méthodes doivent être implémentées. Une pour attacher des observateurs, une pour en détacher et la dernière pour les alerter :</p>
+
+<pre><code class="php hljs"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ArticleManager</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">SplSubject</span>
+</span>{
+    <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@var</span> Article
+     */</span>
+    <span class="hljs-keyword">private</span> $article;
+
+    <span class="hljs-comment">/**
+     * SplObjectStorage pour s'assurer de l'unicité des observateurs.
+     *
+     * <span class="hljs-doctag">@var</span> SplObjectStorage
+     */</span>
+    <span class="hljs-keyword">protected</span> $observers;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__construct</span><span class="hljs-params">()</span>
+    </span>{
+        <span class="hljs-keyword">$this</span>-&gt;observers = <span class="hljs-keyword">new</span> SplObjectStorage();
+    }
+
+    <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@inheritdoc</span>
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">attach</span><span class="hljs-params">(SplObserver $observer)</span>
+    </span>{
+        <span class="hljs-keyword">$this</span>-&gt;observers-&gt;attach($observer);
+    }
+
+    <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@inheritdoc</span>
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">detach</span><span class="hljs-params">(SplObserver $observer)</span>
+    </span>{
+        <span class="hljs-keyword">$this</span>-&gt;observers-&gt;detach($observer);
+    }
+
+    <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@inheritdoc</span>
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">notify</span><span class="hljs-params">()</span>
+    </span>{
+        <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">$this</span>-&gt;observers <span class="hljs-keyword">as</span> $observer) {
+            $observer-&gt;update(<span class="hljs-keyword">$this</span>);
+        }
+    }
+
+    <span class="hljs-comment">/**
+     * Crée un article dans la base de données et alerte les observateurs.
+     *
+     * <span class="hljs-doctag">@param</span> Article $article
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">create</span><span class="hljs-params">(Article $article)</span>
+    </span>{
+        <span class="hljs-keyword">$this</span>-&gt;article = $article;
+
+        <span class="hljs-comment">// Ici dans un cas réel, la méthode va insérer l'article en base</span>
+
+        <span class="hljs-comment">// Une fois tous les traitements effectués, on alerte les observateurs</span>
+        <span class="hljs-keyword">$this</span>-&gt;notify();
+    }
+
+    <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@return</span> Article
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getArticle</span><span class="hljs-params">()</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">$this</span>-&gt;article;
+    }
+}
+</code>
+</pre>
+
+<p>La méthode <strong>create()</strong> permet de créer un article en base et d'alerter tous les observateurs.</p>
+
+<p>On crée maintenant nos 2 classes observatrices : une qui envoie les 
+e-mails, l'autre qui met à jour l'indexation du moteur de recherche. 
+Elles doivent implémenter l'interface <strong>SplObserver</strong>. La méthode <strong>update()</strong>
+ doit être implémenté. Pour simplifier au maximum, je donne uniquement 
+le code devant être implémenté avec un affichage sur la console pour 
+pouvoir tester :</p>
+
+<pre><code class="php hljs"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Notify</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">SplObserver</span>
+</span>{
+    <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@inheritdoc</span>
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">update</span><span class="hljs-params">(SplSubject $subject)</span>
+    </span>{
+        <span class="hljs-keyword">echo</span>(<span class="hljs-string">"La classe Notify a été alerté. L'article '"</span> . $subject-&gt;getArticle()-&gt;getTitle() . <span class="hljs-string">"' a été crée.\n"</span>);
+
+        <span class="hljs-comment">// Ici dans un cas réel, on envoie un e-mail à tous les utilisateurs avec un lien vers le nouvel article</span>
+    }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SearchEngine</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">SplObserver</span>
+</span>{
+    <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@inheritdoc</span>
+     */</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">update</span><span class="hljs-params">(SplSubject $subject)</span>
+    </span>{
+        <span class="hljs-keyword">echo</span>(<span class="hljs-string">"La classe SearchEngine a été alerté. L'article '"</span> . $subject-&gt;getArticle()-&gt;getTitle() . <span class="hljs-string">"' a été crée.\n"</span>);
+
+        <span class="hljs-comment">// Ici dans un cas réel, on indexe le nouvel article</span>
+    }
+}
+</code>
+</pre>
+
+<p>On n'a plus qu'à tester le bon fonctionnement de l'ensemble des 
+classes. On crée notre objet observé puis on y attache l'ensemble des 
+objets qui vont l'observer :</p>
+<pre><code class="php hljs">$notify = <span class="hljs-keyword">new</span> Notify();
+$searchEngine = <span class="hljs-keyword">new</span> SearchEngine();
+
+$articleManager = <span class="hljs-keyword">new</span> ArticleManager();
+$articleManager-&gt;attach($notify);
+$articleManager-&gt;attach($searchEngine);
+</code>
+</pre>
+
+<p>Pou tester, on crée un article :</p>
+<pre><code class="php hljs">$article = <span class="hljs-keyword">new</span> Article();
+$article-&gt;setTitle(<span class="hljs-string">'Titre de l\'article n°1'</span>);
+
+$articleManager-&gt;create($article);
+</code>
+</pre>
+
+<p>Les 2 objets vont alors bien être alertés :</p>
+<pre><code class="hljs stylus">La classe Notify <span class="hljs-selector-tag">a</span> été alerté. L<span class="hljs-string">'article '</span>Titre de l<span class="hljs-string">'article n°1'</span> <span class="hljs-selector-tag">a</span> été crée.
+La classe SearchEngine <span class="hljs-selector-tag">a</span> été alerté. L<span class="hljs-string">'article '</span>Titre de l<span class="hljs-string">'article n°1'</span> <span class="hljs-selector-tag">a</span> été crée.
+</code>
+</pre>
+
+            <footer class="article-footer">
+                <span class="glyphicon glyphicon glyphicon-arrow-up"></span>
+                <a href="#top">Début de l'article</a><br>
+                <br>
+                <aside>
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4686377518766828" data-ad-slot="3046768397" data-ad-format="auto"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </aside>
+            </footer>
+        </article>
+
+        <nav class="article-fil-ariane" style="margin-top:20px">
+    <a href="https://www.christophe-meneses.fr/articles/1">Tous les articles</a>
+
+    <span class="glyphicon glyphicon-chevron-right"></span>
+
+            <a href="https://www.christophe-meneses.fr/articles/php/1">PHP</a>
+        /            <a href="https://www.christophe-meneses.fr/articles/design-pattern/1">Design Pattern</a>
+            
+    <span class="glyphicon glyphicon-chevron-right"></span>
+
+    Exemple d'utilisation de l'Observateur (Observer)
+
+</nav>    </section>
+
+    <aside class="col-sm-2 col-sm-offset-1">
+    <nav class="sidebar sidebar-inset">
+        <h3>Liste des articles par catégorie</h3>
+
+<ol class="list-unstyled">
+    <li>
+        <a href="https://www.christophe-meneses.fr/articles/1">
+            Tous <span class="badge">115</span>
+        </a>
+    </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/apache/1">
+                Apache<span class="badge">2</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/apc/1">
+                APC<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/assetic/1">
+                Assetic<span class="badge">2</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/bash/1">
+                Bash<span class="badge">2</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/centos/1">
+                CentOS<span class="badge">9</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/composer/1">
+                Composer<span class="badge">6</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/css/1">
+                CSS<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/deployer/1">
+                Deployer<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/design-pattern/1">
+                Design Pattern<span class="badge">11</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/docker/1">
+                Docker<span class="badge">5</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/doctrine/1">
+                Doctrine<span class="badge">14</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/elasticsearch/1">
+                Elasticsearch<span class="badge">3</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/git/1">
+                Git<span class="badge">6</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/google-charts/1">
+                Google Charts<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/hardware/1">
+                Hardware<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/hebergement/1">
+                Hébergement<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/javascript/1">
+                JavaScript<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/jquery/1">
+                jQuery<span class="badge">4</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/kibana/1">
+                Kibana<span class="badge">2</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/logstash/1">
+                Logstash<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/machine-learning/1">
+                Machine Learning<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/mariadb/1">
+                MariaDB<span class="badge">2</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/memcached/1">
+                Memcached<span class="badge">2</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/mysql/1">
+                MySQL<span class="badge">3</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/nginx/1">
+                Nginx<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/panther/1">
+                Panther<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/php/1">
+                PHP<span class="badge">57</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/php-codesniffer/1">
+                PHP_CodeSniffer<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/php-fpm/1">
+                PHP-FPM<span class="badge">2</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/phpmyadmin/1">
+                PhpMyAdmin<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/phpstorm/1">
+                PhpStorm<span class="badge">3</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/phpunit/1">
+                PHPUnit<span class="badge">4</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/postgresql/1">
+                PostgreSQL<span class="badge">2</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/rabbitmq/1">
+                RabbitMQ<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/sql/1">
+                SQL<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/svn/1">
+                SVN<span class="badge">4</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/sybase-ase/1">
+                Sybase ASE<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/symfony/1">
+                Symfony<span class="badge">52</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/twig/1">
+                Twig<span class="badge">3</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/ubuntu/1">
+                Ubuntu<span class="badge">14</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/vue-js/1">
+                Vue.js<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/vuex/1">
+                Vuex<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/webpack-encore/1">
+                Webpack Encore<span class="badge">1</span>
+            </a>
+        </li>
+            <li>
+            <a href="https://www.christophe-meneses.fr/articles/xdebug/1">
+                Xdebug<span class="badge">5</span>
+            </a>
+        </li>
+    </ol>
+    </nav>
+
+    <nav class="sidebar sidebar-inset">
+        <h3>Derniers articles publiés</h3>
+
+<dl>
+                        <dt>
+                Doctrine            </dt>
+            <dd>
+                <a href="https://www.christophe-meneses.fr/article/filtrer-des-collections-doctrine-avec-le-systeme-de-criteres">Filtrer des collections Doctrine avec le système de critères</a>
+            </dd>
+            <br>                    <dt>
+                Symfony / PHPUnit / Panther            </dt>
+            <dd>
+                <a href="https://www.christophe-meneses.fr/article/migrer-ses-tests-fonctionnels-vers-symfony-panther">Migrer ses tests fonctionnels vers Symfony Panther</a>
+            </dd>
+            <br>                    <dt>
+                PHP / Symfony            </dt>
+            <dd>
+                <a href="https://www.christophe-meneses.fr/article/symfony-refreshing-a-deauthenticated-user-is-deprecated-as-of-3-4-and-will-trigger-a-logout-in-4-0">Symfony : Refreshing a deauthenticated user is deprecated as of 3.4 and will trigger a logout in 4.0</a>
+            </dd>
+            <br>                    <dt>
+                Composer            </dt>
+            <dd>
+                <a href="https://www.christophe-meneses.fr/article/composer-ajouter-une-dependance-sur-un-commit-precis-dune-branche-precise">Composer : ajouter une dépendance sur un commit précis d'une branche précise</a>
+            </dd>
+            <br>                    <dt>
+                Vue.js / Vuex            </dt>
+            <dd>
+                <a href="https://www.christophe-meneses.fr/article/store-propager-une-action-qui-est-situee-dans-un-module-different">Store : propager une action qui est située dans un module différent</a>
+            </dd>
+            <br>            </dl>
+    </nav>
+</aside>
+
+                <div class="col-sm-1"></div>
+            </div>
+        </div>
+
+        <div class="espace-footer"></div>
+    </div>
+
+    <footer class="footer">
+        <div class="logos">
+            <a href="http://www.php.net/" target="_blank" title="Aller sur le site officiel de PHP">
+                <img src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/php.png" alt="PHP" title="PHP" width="70" height="38">
+            </a>
+
+            <a href="http://symfony.com/" target="_blank" title="Aller sur le site officiel de Symfony">
+                <img src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/symfony.png" alt="Symfony" title="Symfony" width="42" height="50">
+            </a>
+
+            <a href="https://mariadb.org/" target="_blank" title="Aller sur le site officiel de MariaDB">
+                <img src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/mariadb.png" alt="MariaDB" title="MariaDB" width="60" height="55">
+            </a>
+
+            <a href="http://www.w3.org/TR/html5/" target="_blank" title="Aller sur le site officiel du W3C">
+                <img src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/html5.png" alt="HTML5" title="HTML5" width="50" height="50">
+            </a>
+
+            <a href="http://www.w3.org/Style/CSS/current-work" target="_blank" title="Aller sur le site officiel du W3C">
+                <img src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/css3.png" alt="CSS3" title="CSS3" width="35" height="50">
+            </a>
+
+            <img src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/js.png" alt="JavaScript" title="JavaScript" width="50" height="50">
+
+            <a href="http://getbootstrap.com/" target="_blank" title="Aller sur le site officiel de Bootstrap">
+                <img src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/bootstrap.png" alt="Bootstrap" title="Bootstrap" width="50" height="50">
+            </a>
+        </div>
+
+        <p>
+            © 2014 - 2019 réalisé par <a href="https://www.christophe-meneses.fr/">Christophe MENESES</a>
+        </p>
+    </footer>
+
+            
+
+    <script src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/runtime.js"></script><script src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/vendors4da5b4c1.js"></script><script src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/vendors5c0db3ba.js"></script><script src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/app.js"></script>
+
+        <script src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/vendors8952c8d2.js"></script><script src="PHP%20_%20Design%20Pattern%20%20%20Exemple%20d'utilisation%20de%20l'Observateur%20(Observer)_fichiers/show.js"></script>
+
+    <!-- Matomo -->
+    <script type="text/javascript">
+        var _paq = _paq || [];
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u="https://matomo.christophe-meneses.fr";
+            _paq.push(['setTrackerUrl', u+'/piwik.php']);
+            _paq.push(['setSiteId', 1]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+            g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'/piwik.js'; s.parentNode.insertBefore(g,s);
+        })();
+    </script>
+    <noscript><p><img src="https://matomo.christophe-meneses.fr/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
+    <!-- End Piwik Code -->
+
+    <!-- Google Sitelinks Search Box -->
+    <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "WebSite",
+          "url": "https://www.christophe-meneses.fr",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.christophe-meneses.fr/rechercher/{search_term_string}/page/1",
+            "query-input": "required name=search_term_string"
+          }
+        }
+    </script>
+    <!--End Google Sitelinks Search Box -->
+    
+
+</body></html>
